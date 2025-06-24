@@ -1,0 +1,9 @@
+My idea was inspired by the need for isolated development environments. I wanted to simulate how a backend service and database communicate in production.
+
+One creative aspect was adding a self-healing monitoring script to detect and restart an unhealthy MongoDB service. This demonstrates how Docker enables automated recovery.
+
+The biggest challenge was managing inter-service communication manually without Docker Compose. I solved it using a custom Docker network and explicit container names.
+
+Docker’s features, especially multi-stage builds, networking, and volumes, made this project cleaner and more modular. I could test services independently and integrate later.
+
+In production, I would add NGINX as a reverse proxy, implement CI/CD pipelines, secure environment variables, and scale the app using Kubernetes or Docker Swarm.
