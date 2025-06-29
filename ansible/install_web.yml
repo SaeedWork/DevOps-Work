@@ -1,0 +1,31 @@
+---
+- name: Install Apache and Deploy Web App
+  hosts: all
+  become: yes
+
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+
+    - name: Install Apache
+      apt:
+        name: apache2
+        state: present
+
+    - name: Create a directory in home
+      file:
+        path: /home/azureuser/devops_project
+        state: directory
+        owner: azureuser
+        group: azureuser
+        mode: '0755'
+
+    - name: Deploy index.html
+      copy:
+        src: /workspace/app/index.html
+        dest: /var/www/html/index.html
+        owner: www-data
+        group: www-data
+        mode: '0644'

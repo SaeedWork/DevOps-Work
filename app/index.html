@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saeed's DevOps Project</title>
+    <!-- Tailwind CSS CDN for modern styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles for a polished look, complementing Tailwind */
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Applying a gradient background */
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            overflow: hidden; /* Hide overflow for background elements */
+        }
+
+        .container {
+            /* Glassmorphism effect for the content box */
+            background-color: rgba(255, 255, 255, 0.15); /* Slightly transparent white */
+            backdrop-filter: blur(10px); /* Blur effect */
+            border: 1px solid rgba(255, 255, 255, 0.3); /* Light border */
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37); /* Soft shadow */
+        }
+
+        /* Basic animation for the text */
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .animate-fadeInScale {
+            animation: fadeInScale 1s ease-out forwards;
+        }
+    </style>
+</head>
+<body class="selection:bg-purple-300 selection:text-purple-900">
+    <!-- Background abstract shapes for visual interest -->
+    <div class="absolute inset-0 overflow-hidden z-0">
+        <div class="absolute w-24 h-24 bg-white opacity-10 rounded-full animate-pulse-slow left-1/4 top-1/4"></div>
+        <div class="absolute w-32 h-32 bg-white opacity-10 rounded-full animate-pulse-slow right-1/4 bottom-1/4 animation-delay-2000"></div>
+        <div class="absolute w-16 h-16 bg-white opacity-10 rounded-full animate-pulse-slow left-1/2 top-3/4 animation-delay-4000"></div>
+    </div>
+
+    <div class="container relative z-10 p-8 md:p-12 lg:p-16 rounded-2xl text-center max-w-xl mx-auto">
+        <h1 class="text-white text-3xl md:text-5xl lg:text-6xl font-extrabold mb-4 leading-tight drop-shadow-lg animate-fadeInScale">
+            This is Saeed's DevOps Project Live.
+        </h1>
+        <p class="text-white text-lg md:text-xl font-light opacity-90 animate-fadeInScale animation-delay-500">
+            Welcome to the live environment.
+        </p>
+    </div>
+
+    <!-- Tailwind's custom animation utilities for pulse-slow and animation-delay -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    keyframes: {
+                        'pulse-slow': {
+                            '0%, 100%': { transform: 'scale(1)', opacity: '0.1' },
+                            '50%': { transform: 'scale(1.2)', opacity: '0.2' },
+                        }
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse-slow 8s infinite ease-in-out',
+                        'fadeInScale': 'fadeInScale 1s ease-out forwards'
+                    },
+                    animationDelay: {
+                        '500': '0.5s',
+                        '2000': '2s',
+                        '4000': '4s',
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+</html>
+
