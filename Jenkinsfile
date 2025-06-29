@@ -37,17 +37,6 @@ pipeline {
       }
     }
 
-    stage('Generate hosts.yml') {
-      steps {
-        dir('/workspace/ansible') {
-          sh '''
-            PUBLIC_IP=$(cat host_ip.txt)
-            sed "s/__PUBLIC_IP__/$PUBLIC_IP/" hosts.tpl.yml > hosts.yml
-          '''
-        }
-      }
-    }
-
     stage('Run Ansible Playbook') {
       steps {
         dir('/workspace/ansible') {
