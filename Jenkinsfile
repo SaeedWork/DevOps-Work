@@ -4,64 +4,66 @@ pipeline {
   environment {
     TF_VAR_admin_username = 'azureuser'
     TF_VAR_ssh_public_key_path = '/root/.ssh/id_rsa.pub'
+    
+    ARM_CLIENT_ID       = credentials('ARM_CLIENT_ID')
+    ARM_CLIENT_SECRET   = credentials('ARM_CLIENT_SECRET')
+    ARM_SUBSCRIPTION_ID = credentials('ARM_SUBSCRIPTION_ID')
+    ARM_TENANT_ID       = credentials('ARM_TENANT_ID')
   }
 
   stages {
-    stage('Clone Repo') {
-      steps {
-        git 'https://github.com/yourusername/your-repo.git'
-      }
-    }
 
     stage('Terraform Init') {
-      dir('terraform') {
-        steps {
+      steps {
+        dir('/workspace/terraform') {
           sh 'terraform init'
         }
       }
     }
 
     stage('Terraform Apply') {
-      dir('terraform') {
-        steps {
+      steps {
+        dir('/workspace/terraform') {
           sh 'terraform apply -auto-approve'
         }
       }
     }
 
-    stage('Get Public IP and Replace Inventory') {
-        steps {
-         script {
-           def publicIp = sh(script: "cd terraform && terraform output -raw public_ip", returnStdout: true).trim()
-           sh """
-           sed -i "s/__PUBLIC_IP__/${publicIp}/" ansible/hosts.yml
-            """
+    stage('Terraform Output') {
+      steps {
+        dir('/workspace/terraform') {
+          sh 'terraform output -raw public_ip > ../ansible/host_ip.txt'
         }
       }
     }
 
-    stage('Configure Server with Ansible') {
+    stage('Generate hosts.yml') {
       steps {
-        sh 'ansible-playbook -i ansible/hosts.yml ansible/install_web.yml'
+        dir('/workspace/ansible') {
+          sh '''
+            PUBLIC_IP=$(cat host_ip.txt)
+            sed "s/__PUBLIC_IP__/$PUBLIC_IP/" hosts.tpl.yml > hosts.yml
+          '''
+        }
+      }
+    }
+
+    stage('Run Ansible Playbook') {
+      steps {
+        dir('/workspace/ansible') {
+          sh 'ansible-playbook -i hosts.yml install_web.yml'
+        }
       }
     }
 
     stage('Verify Deployment') {
       steps {
-        script {
-          def publicIp = sh(script: "cd terraform && terraform output -raw public_ip", returnStdout: true).trim()
-          sh "curl http://${publicIp}"
-        }
+        sh '''
+          sleep 10
+          IP=$(terraform/output -raw public_ip)
+          curl http://$IP
+        '''
       }
-    }
-  }
-
-  post {
-    success {
-      echo 'Deployment completed successfully!'
-    }
-    failure {
-      echo 'Deployment failed. Check logs.'
     }
   }
 }

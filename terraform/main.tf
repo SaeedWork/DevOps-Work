@@ -49,9 +49,14 @@ resource "azurerm_network_interface" "nic" {
 
 resource "azurerm_public_ip" "pip" {
   name                = "sk-project-pip"
+  location            = "eastasia"
   resource_group_name = azurerm_resource_group.rg.name
-  location            = var.location
-  allocation_method   = "Dynamic"
+  allocation_method   = "Static" 
+  sku                 = "Standard" 
+  sku_tier            = "Regional"
+  ip_version          = "IPv4"
+  idle_timeout_in_minutes = 4
+  ddos_protection_mode = "VirtualNetworkInherited"
 }
 
 resource "azurerm_virtual_network" "vnet" {
