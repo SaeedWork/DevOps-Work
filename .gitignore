@@ -1,0 +1,29 @@
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.backup
+*.tfvars
+crash.log
+terraform.tfplan
+
+# Ansible
+ansible/host_ip.txt
+
+# General
+*.log
+*.bak
+*.swp
+*.tmp
+
+# System files
+.DS_Store
+Thumbs.db
+
+# SSH keys and credentials (if any accidentally added)
+*.pem
+*.key
+*.pub
+
+# Python virtualenv or node_modules if present later
+venv/
+node_modules/
